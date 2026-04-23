@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Full training — ContinuousTokenizer on the full BridgeData dataset
+# Run:  python scripts/train_continuous_tokenizer.py --config configs/train_continuous.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+
+model:
+  latent_channels:      16
+  base_channels:        64
+  temporal_compression: 4
+  use_attention:        true
+  conv_type:            factorized   # full = joint 3D (Day 1)  |  factorized = space+time separate (Day 2)
+
+loss:
+  use_perceptual: true
+  use_flow:       false
+  use_gram:       false
+  lambda_l1:      1.0
+  lambda_perc:    0.1
+  lambda_flow:    0.05
+  lambda_gram:    0.02
+
+train:
+  lr:          1.0e-4
+  epochs:      20
+  batch_size:  8
+  grad_clip:   1.0
+  log_every:   50
+  viz_every:   200
+  ckpt_every:  500
+  num_workers: 4
+
+log:
+  use_wandb: false
+
+data:
+  train_manifest: local_storage/dataset/bridgedata_clips/train.txt
+  val_manifest:   local_storage/dataset/bridgedata_clips/val.txt
+  device:         cuda

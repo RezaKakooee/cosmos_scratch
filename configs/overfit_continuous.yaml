@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Overfit one batch — sanity-check config for ContinuousTokenizer
+# Run:  python scripts/overfit_one_batch.py --config configs/overfit_continuous.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+
+model:
+  latent_channels:      16
+  base_channels:        64      # channel widths scale as C, 2C, 4C through the network
+  temporal_compression: 4       # 1 = spatial only  |  2 = T÷2  |  4 = T÷4
+  use_attention:        true    # enable causal spatiotemporal attention
+  conv_type:            factorized    # full = joint 3D (Day 1)  |  factorized = space+time separate (Day 2)
+
+loss:
+  use_perceptual: true
+  use_flow:       true
+  use_gram:       true
+  lambda_l1:      1.0
+  lambda_perc:    0.1
+  lambda_flow:    0.05
+  lambda_gram:    0.02
+
+train:
+  lr:            1.0e-4
+  lr_min_factor: 0.01          # eta_min = lr * lr_min_factor  (cosine decay floor)
+  steps:         50000
+  batch_size:    4
+  grad_clip:     1.0
+  resume_ckpt:   null          # path/to/checkpoint.pt  or null to start fresh
+
+log:
+  log_every:  1000
+  viz_every:  10000
+  use_wandb:  false
+
+data:
+  manifest: local_storage/dataset/bridgedata_clips/train.txt
+  device:   cuda
