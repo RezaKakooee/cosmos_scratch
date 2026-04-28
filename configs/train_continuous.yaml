@@ -21,12 +21,12 @@ loss:
 
 train:
   lr:          1.0e-4
-  epochs:      20
+  epochs:      100         # 100 × 163 steps ≈ 16 300 steps ≈ 1.5 h on Titan RTX
   batch_size:  8
   grad_clip:   1.0
   log_every:   50
-  viz_every:   200
-  ckpt_every:  500
+  viz_every:   500
+  ckpt_every:  1000
   num_workers: 4
 
 log:
